@@ -20,12 +20,13 @@ class GamePiece {
         tile.setOccupied();
     }
 
+    /*
     public void moveGP(){
         Tile nextTile = tile.getNextTile();
         this.setGP(nextTile);
         tile.setEmpty();
         tile = nextTile;
-    }
+    }*/
 
     public String locateGP(){
         return tile.toString();

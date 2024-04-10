@@ -2,10 +2,7 @@ package GameOfUr;
 
 class Tile {
 
-    Tile nextTile;
-
-    Tile(Tile nextTile){
-        this.nextTile = nextTile;
+    Tile(){
     }
 
     Boolean isEmpty = true;
@@ -20,11 +17,6 @@ class Tile {
 
     public Boolean isEmpty(){
         return isEmpty;
-    }
-
-    public Tile getNextTile(){
-        this.nextTile = nextTile;
-        return nextTile;
     }
 
     public Tile getTile(){
