@@ -25,6 +25,10 @@ public class GameOfUr {
         //Tile[] tiles = {tile, secondTile, thirdTile};
 
         GUI gui = new GUI();
-        
+
+        Board board = new Board();
+
+        board.getWhiteTiles();
+
     }
 }

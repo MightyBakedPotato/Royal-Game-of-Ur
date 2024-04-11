@@ -1,4 +1,4 @@
-package GameOfUr;
+/*package GameOfUr;
 
 class GamePiece {
 
@@ -26,10 +26,11 @@ class GamePiece {
         this.setGP(nextTile);
         tile.setEmpty();
         tile = nextTile;
-    }*/
+    }
 
     public String locateGP(){
         return tile.toString();
     }
 
 }
+*/
