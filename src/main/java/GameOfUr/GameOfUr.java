@@ -6,29 +6,17 @@ public class GameOfUr {
 
     public static void main(String args[]){
 
-        Player whitePlayer = new Player("WhitePlayer");
-
-        /*
-        GamePiece gp = new GamePiece(tile, playerOne);
-
-        System.out.println(gp.locateGP()+gp.getGPplayer());
-
-        gp.moveGP();
-
-        System.out.println(gp.locateGP()+gp.getGPplayer());
-
-        gp.moveGP();
-
-        System.out.println(gp.locateGP()+gp.getGPplayer());
-        */
-
-        //Tile[] tiles = {tile, secondTile, thirdTile};
+        Player whitePlayer = new Player("whitePlayer");
 
         GUI gui = new GUI();
 
         Board board = new Board();
 
+        board.moveGP(whitePlayer.getPlayerID(),0, 4);
+
+        board.getWhiteGPs();
         board.getWhiteTiles();
+
 
     }
 }

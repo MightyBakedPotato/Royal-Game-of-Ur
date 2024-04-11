@@ -11,20 +11,26 @@ class Board{
 
 	public void getWhiteTiles(){
 		for (Tile i : whiteTiles) {
-            System.out.println(i);
+            System.out.println(i.isEmpty);
         }
 	}
 
-	public Tile[] getBlackTiles(){
-		return blackTiles;
+	public void getBlackTiles(){
+			for (Tile i : blackTiles) {
+            	System.out.println(i.isEmpty);
+            }
 	}
 
-	public int[] getWhiteGPs(){
-		return whiteGPs;
+	public void getWhiteGPs(){
+		for (int i: whiteGPs){
+			System.out.println(i);
+		}
 	}
 
-	public int[] getBlackGPs(){
-		return blackGPs;
+	public void getBlackGPs(){
+		for (int i:blackGPs){
+			System.out.println(i);
+		}
 	}
 
 	private void setTiles(){
@@ -83,6 +89,26 @@ class Board{
 		blackTiles[12] = tile12_black;
 		Tile endTile_black = new Tile();
 		blackTiles[13] = endTile_black;
+	}
+
+	public void moveGP(String player, int gamePieceIndex, int diceRoll){
+		int newGPposition = gamePieceIndex + diceRoll;
+		Tile newTile = null;
+
+		switch(player){
+			case "whitePlayer":
+				whiteGPs[gamePieceIndex] = newGPposition;
+				newTile = (Tile)Array.get(whiteTiles, newGPposition);
+				break;
+
+			case "blackPlayer": 
+				blackGPs[gamePieceIndex] = newGPposition;
+				newTile = (Tile)Array.get(blackTiles, newGPposition);
+				break;
+		}
+
+		newTile.setOccupied();
+
 	}
 
 	public void setGPs(){
