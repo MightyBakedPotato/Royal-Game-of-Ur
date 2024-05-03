@@ -155,21 +155,172 @@ class Board{
 
 		}
 
-		
-		public BoardStatus getBoardStatus ()
-		{
-			BoardStatus status = new BoardStatus();
+	////////// METHODS NEEDED TO CREATE THE STATUS /////////
 
-			///TEST///
+	private final int colSwitchFirstTiles(int index){
 
-			status.whiteStartGPsCount = 5;
-			status.blackStartGPsCount = 6;
-			status.tilesGrid[1][2] = TileState.WHITE_PIECE;
-			status.tilesGrid[0][7] = TileState.WHITE_PIECE;
-			status.tilesGrid[1][0] = TileState.BLACK_PIECE;
+		int j = 999;
 
-			return status;
+		switch(index){
+			case 0 :
+				j = 4;
+				break;
+			case 1 :
+				j = 3;
+				break;
+			case 2 :
+				j = 2;
+				break;
+			case 3 :
+				j = 1;
+				break;
+			case 4 :
+				j = 0;
+				break;
 		}
+
+		return j;
+	}
+
+	private final int colSwitchMiddleTiles(int index){
+
+		int j = 999;
+
+		switch(index){
+			case 5 :
+				j = 0;
+				break;
+			case 6 :
+				j = 1;
+				break;
+			case 7 :
+				j = 2;
+				break;
+			case 8 :
+				j = 3;
+				break;
+			case 9 :
+				j = 4;
+				break;
+			case 10 :
+				j = 5;
+				break;
+			case 11 :
+				j = 6;
+				break;
+			case 12 :
+				j = 7;
+				break;
+			}
+
+		return j;
+		
+		}
+
+	private final int colSwitchLastTiles(int index){
+
+		int j = 999;
+
+		switch(index){
+			case 13 :
+				j = 7;
+				break;
+			case 14 :
+				j = 6;
+				break;
+			case 15 :
+				j = 5;
+				break;
+		}
+
+		return j;
+	}
+
+	private int[] getWhiteGPCoords(int index){
+
+		int i = -1;
+		int j = -1;
+
+		if(index <= 4){
+			i = 0;
+			j = colSwitchFirstTiles(index);
+		}else if(index >= 5 && index <= 12){
+			i = 1;
+			j = colSwitchMiddleTiles(index);
+		}else if(index >= 13 && index <= 16){
+			i = 0;
+			j = colSwitchLastTiles(index);
+		}else{
+			//there's smthg wrong here, log error :(
+		}
+
+		int [] coords = new int[2];
+		coords[0] = i;
+		coords[1] = j;
+
+		return coords;
+	}
+
+	private int[] getBlackGPCoords(int index){
+
+		int i = -1;
+		int j = -1;
+
+		if(index <= 4){
+			i = 2;
+			j = colSwitchFirstTiles(index);
+		}else if(index >= 5 && index <= 12){
+			i = 1;
+			j = colSwitchMiddleTiles(index);
+		}else if(index >= 13 && index <= 16){
+			i = 2;
+			j = colSwitchLastTiles(index);
+		}else{
+			//there's smthg wrong here, log error :(
+		}
+
+		int [] coords = new int[2];
+		coords[0] = i;
+		coords[1] = j;
+
+		return coords;
+	}
+
+	public void testPrint(){
+
+		for (int i = 0; i < whiteGPs.length; i++) {
+				int z = whiteGPs[i];
+				int [] coords = getWhiteGPCoords(z);
+				int x = coords[0];
+				int y = coords[1];
+				System.out.println("x = " + x + " y = "+ y);
+                }
+	}
+
+	///////// STATUS //////////
+
+	public BoardStatus setStatus (){
+
+		this.status = new BoardStatus();
+
+		///TEST///
+
+		
+		status.whiteStartGPsCount = 5;
+		status.blackStartGPsCount = 6;
+		status.tilesGrid[1][2] = TileState.WHITE_PIECE;
+		status.tilesGrid[0][7] = TileState.WHITE_PIECE;
+		status.tilesGrid[1][0] = TileState.BLACK_PIECE;
+		
+
+		return status;
+	}
+
+	public status getStatus(){
+
+		this.status = new BoardStatus();
+
+	}
 	
 
 }
