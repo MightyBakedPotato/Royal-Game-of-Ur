@@ -1,6 +1,8 @@
 package GameOfUr;
 
 import java.lang.reflect.Array;
+import GameOfUr.BoardStatus;
+import GameOfUr.BoardStatus.TileState;
 
 class Board{
 
@@ -8,6 +10,7 @@ class Board{
 	private Tile[] blackTiles;
 	private int[] whiteGPs;
 	private int[] blackGPs;
+	private BoardStatus status;
 
 	public void getWhiteTiles(){
 		for (Tile i : whiteTiles) {
@@ -75,20 +78,26 @@ class Board{
 		Tile midTile10 = new Tile();
 		blackTiles[10] = midTile10;
 		whiteTiles[10] = midTile10;
+		Tile midTile11 = new Tile();
+		blackTiles[11] = midTile11;
+		whiteTiles[11] = midTile11;
+		Tile midTile12 = new Tile();
+		blackTiles[12] = midTile12;
+		whiteTiles[12] = midTile12;
 	
-		Tile tile11_white = new Tile();
-		whiteTiles[11] = tile11_white;
-		Tile tile12_white = new Tile();
-		whiteTiles[12] = tile12_white;
+		Tile tile13_white = new Tile();
+		whiteTiles[13] = tile13_white;
+		Tile tile14_white = new Tile();
+		whiteTiles[14] = tile14_white;
 		Tile endTile_white = new Tile();
-		whiteTiles[13] = endTile_white;
+		whiteTiles[15] = endTile_white;
 	
-		Tile tile11_black = new Tile();
-		blackTiles[11] = tile11_black;
-		Tile tile12_black = new Tile();
-		blackTiles[12] = tile12_black;
+		Tile tile13_black = new Tile();
+		blackTiles[13] = tile13_black;
+		Tile tile14_black = new Tile();
+		blackTiles[14] = tile14_black;
 		Tile endTile_black = new Tile();
-		blackTiles[13] = endTile_black;
+		blackTiles[15] = endTile_black;
 	}
 
 	public void moveGP(String player, int gamePieceIndex, int diceRoll){
@@ -111,7 +120,7 @@ class Board{
 
 	}
 
-	public void setGPs(){
+	public void initGPs(){
 
 		whiteGPs[0] = 0;
 		whiteGPs[1] = 0;
@@ -132,14 +141,35 @@ class Board{
 	}
 
 	Board(){
-		this.whiteTiles = new Tile[14];
-		this.blackTiles = new Tile[14];
+		this.whiteTiles = new Tile[16];
+		this.blackTiles = new Tile[16];
 
 		this.whiteGPs = new int[7];
 		this.blackGPs = new int[7];
 		
 		this.setTiles();
-		this.setGPs();
+		this.initGPs();
+
+		this.status = new BoardStatus();
+		status.printStatus();
+
 		}
+
+		
+		public BoardStatus getBoardStatus ()
+		{
+			BoardStatus status = new BoardStatus();
+
+			///TEST///
+
+			status.whiteStartGPsCount = 5;
+			status.blackStartGPsCount = 6;
+			status.tilesGrid[1][2] = TileState.WHITE_PIECE;
+			status.tilesGrid[0][7] = TileState.WHITE_PIECE;
+			status.tilesGrid[1][0] = TileState.BLACK_PIECE;
+
+			return status;
+		}
+	
 
 }

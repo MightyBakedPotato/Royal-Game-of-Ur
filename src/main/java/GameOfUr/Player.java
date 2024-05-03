@@ -2,7 +2,7 @@ package GameOfUr;
 
 class Player{
 
-    String playerID;
+    String playerID; //change to enum
 
     Player(String playerID){
         this.playerID = playerID;
