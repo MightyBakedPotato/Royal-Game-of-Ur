@@ -22,6 +22,8 @@ public class GameOfUr {
         board.getWhiteGPs();
         board.getWhiteTiles();
 
+        board.getStatus();
+
         board.testPrint();
 
     }

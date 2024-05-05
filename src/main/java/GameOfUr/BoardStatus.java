@@ -39,11 +39,11 @@ class BoardStatus{
 
 			int iEndWhite = 0;
     		int jEndWhite = tilesGrid[0].length - 3; 
-			tilesGrid[iEndWhite][jEndWhite] = TileState.START;
+			tilesGrid[iEndWhite][jEndWhite] = TileState.END;
 
 			int iEndBlack = 2;
     		int jEndBlack = tilesGrid[0].length - 3; 
-			tilesGrid[iEndBlack][jEndBlack] = TileState.START;
+			tilesGrid[iEndBlack][jEndBlack] = TileState.END;
     }
 
     public void printStatus(){

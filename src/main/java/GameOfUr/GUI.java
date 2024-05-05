@@ -203,7 +203,7 @@ class GUI{
 
     public void updateView ()
     {
-        BoardStatus status = model.setStatus();
+        BoardStatus status = model.getStatus();
 
         for (int i = 0; i < labelArray.length; i++) {
             for (int j = 0; j < labelArray[i].length; j++) {

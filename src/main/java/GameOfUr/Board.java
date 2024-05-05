@@ -10,7 +10,7 @@ class Board{
 	private Tile[] blackTiles;
 	private int[] whiteGPs;
 	private int[] blackGPs;
-	private BoardStatus status;
+	//private BoardStatus status;
 
 	public void getWhiteTiles(){
 		for (Tile i : whiteTiles) {
@@ -150,9 +150,6 @@ class Board{
 		this.setTiles();
 		this.initGPs();
 
-		this.status = new BoardStatus();
-		status.printStatus();
-
 		}
 
 	////////// METHODS NEEDED TO CREATE THE STATUS /////////
@@ -291,13 +288,13 @@ class Board{
 		for (int i = 0; i < whiteGPs.length; i++) {
 				int z = whiteGPs[i];
 				int [] coords = getWhiteGPCoords(z);
-				int x = coords[0];
-				int y = coords[1];
-				System.out.println("x = " + x + " y = "+ y);
+				System.out.println("x = " + coords[0] + " y = "+ coords[1]);
                 }
 	}
 
 	///////// STATUS //////////
+
+	/*
 
 	public BoardStatus setStatus (){
 
@@ -315,10 +312,27 @@ class Board{
 
 		return status;
 	}
+	*/
 
-	public status getStatus(){
+	public BoardStatus getStatus(){
 
-		this.status = new BoardStatus();
+		BoardStatus status = new BoardStatus();
+
+		for (int i = 0; i < whiteGPs.length; i++) {
+				int z = whiteGPs[i];
+				int [] coords = getWhiteGPCoords(z);
+				status.tilesGrid [coords[0]] [coords[1]] = TileState.WHITE_PIECE;
+                }
+
+        for (int i = 0; i < blackGPs.length; i++) {
+				int z = blackGPs[i];
+				int [] coords = getBlackGPCoords(z);
+				status.tilesGrid [coords[0]] [coords[1]] = TileState.BLACK_PIECE;
+                }
+
+        status.printStatus();
+
+        return status;
 
 	}
 	
