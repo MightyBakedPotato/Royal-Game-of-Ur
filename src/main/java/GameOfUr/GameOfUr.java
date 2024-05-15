@@ -14,17 +14,10 @@ public class GameOfUr {
 
         Board board = new Board();
 
-        // set di GUI e Board nelle relative classi (per passare Gui a Board, e Board a GUI)
-        // poi usare questi metodi in main
+        board.setGUI(gui);
+        gui.setModel(board);
 
         board.moveGP(whitePlayer.getPlayerID(),0, 4);
-
-        board.getWhiteGPs();
-        board.getWhiteTiles();
-
-        board.getStatus();
-
-        board.testPrint();
 
     }
 }

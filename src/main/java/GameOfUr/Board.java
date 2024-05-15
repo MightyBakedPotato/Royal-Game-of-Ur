@@ -10,7 +10,11 @@ class Board{
 	private Tile[] blackTiles;
 	private int[] whiteGPs;
 	private int[] blackGPs;
-	//private BoardStatus status;
+	public GUI _gui;
+	
+	public void setGUI(GUI gui){
+		_gui = gui;
+	}
 
 	public void getWhiteTiles(){
 		for (Tile i : whiteTiles) {
@@ -118,6 +122,8 @@ class Board{
 
 		newTile.setOccupied();
 
+		_gui.updateView();
+
 	}
 
 	public void initGPs(){
@@ -181,7 +187,7 @@ class Board{
 
 	private final int colSwitchMiddleTiles(int index){
 
-		int j = 999;
+		int j = -1;
 
 		switch(index){
 			case 5 :
@@ -216,7 +222,7 @@ class Board{
 
 	private final int colSwitchLastTiles(int index){
 
-		int j = 999;
+		int j = -1;
 
 		switch(index){
 			case 13 :
@@ -283,54 +289,37 @@ class Board{
 		return coords;
 	}
 
-	public void testPrint(){
-
-		for (int i = 0; i < whiteGPs.length; i++) {
-				int z = whiteGPs[i];
-				int [] coords = getWhiteGPCoords(z);
-				System.out.println("x = " + coords[0] + " y = "+ coords[1]);
-                }
-	}
 
 	///////// STATUS //////////
 
-	/*
-
-	public BoardStatus setStatus (){
-
-		this.status = new BoardStatus();
-
-		///TEST///
-
-		
-		status.whiteStartGPsCount = 5;
-		status.blackStartGPsCount = 6;
-		status.tilesGrid[1][2] = TileState.WHITE_PIECE;
-		status.tilesGrid[0][7] = TileState.WHITE_PIECE;
-		status.tilesGrid[1][0] = TileState.BLACK_PIECE;
-		
-
-		return status;
-	}
-	*/
 
 	public BoardStatus getStatus(){
 
 		BoardStatus status = new BoardStatus();
 
 		for (int i = 0; i < whiteGPs.length; i++) {
+				if(whiteGPs[i] == 0){
+					status.whiteStartGPsCount ++;
+				}else if(whiteGPs[i] == 15){
+					status.whiteEndGPsCount ++;
+				}else{
 				int z = whiteGPs[i];
 				int [] coords = getWhiteGPCoords(z);
 				status.tilesGrid [coords[0]] [coords[1]] = TileState.WHITE_PIECE;
                 }
+            }
 
         for (int i = 0; i < blackGPs.length; i++) {
+        		if(whiteGPs[i] == 0){
+					status.blackStartGPsCount ++;
+				}else if(whiteGPs[i] == 15){
+					status.blackEndGPsCount ++;
+				}else{
 				int z = blackGPs[i];
 				int [] coords = getBlackGPCoords(z);
 				status.tilesGrid [coords[0]] [coords[1]] = TileState.BLACK_PIECE;
-                }
-
-        status.printStatus();
+				}            
+            }
 
         return status;
 

@@ -11,11 +11,16 @@ class GUI{
     private JFrame frame;
     //private Container content;
     private TileLabel[][] labelArray;
-    private Board model = new Board();
+    private Board _model;
+
+    public void setModel(Board model){
+        _model = model;
+        updateView();
+    }
 
     class TileLabel extends JLabel{
 
-        private TileState _status;
+        private TileState state;
 
         private void setStyle(){
             setBorder(new LineBorder(Color.BLACK));
@@ -34,36 +39,10 @@ class GUI{
             //setText("a");
         }
 
-        public void setState ( TileState status )
-        {      
-            _status = status;
-
-            switch(status){
-
-            case START:
-                break;
-
-            case END:
-                break;
-
-            case EMPTY:
-                break;
-
-            case WHITE_PIECE: 
-                this.setText("1");
-                this.setForeground(Color.RED);
-                break;
-
-            case BLACK_PIECE: 
-                this.setText("1");
-                this.setForeground(Color.BLACK);
-                break;
-
-            default:
-                System.out.println("uhoh, something wrong with the setState switch");
+        public void setState ( TileState state ){      
+            this.state = state;
             }
         }
-    }
 
     private void labelArray(){
 
@@ -92,8 +71,6 @@ class GUI{
         content.setLayout( new GridBagLayout());
 
         labelArray();
-
-        updateView();
 
         /*
         {
@@ -203,13 +180,54 @@ class GUI{
 
     public void updateView ()
     {
-        BoardStatus status = model.getStatus();
+        BoardStatus status = _model.getStatus();
 
         for (int i = 0; i < labelArray.length; i++) {
             for (int j = 0; j < labelArray[i].length; j++) {
-                this.labelArray[i][j].setState(status.tilesGrid[i][j]);
-                }
-            }
+                labelArray[i][j].setState(status.tilesGrid[i][j]);
 
+                switch(labelArray[i][j].state){
+
+                    case START:
+                    if(i == 0 && j == labelArray[0].length - 4){
+                        labelArray[i][j].setText(String.valueOf(status.whiteStartGPsCount));
+                        labelArray[i][j].setForeground(Color.RED);
+                    }else if(i == 2 && j == labelArray[0].length - 4){
+                        labelArray[i][j].setText(String.valueOf(status.blackStartGPsCount));
+                        labelArray[i][j].setForeground(Color.BLACK);
+                    }
+                    break;
+
+                    case END:
+                    if(i == 0 && j == labelArray[0].length - 3){
+                        labelArray[i][j].setText(String.valueOf(status.whiteEndGPsCount));
+                        labelArray[i][j].setForeground(Color.RED);
+                    }else if(i == 2 && j == labelArray[0].length -3){
+                        labelArray[i][j].setText(String.valueOf(status.blackEndGPsCount));
+                        labelArray[i][j].setForeground(Color.BLACK);
+                    }
+                    break;
+
+                    case EMPTY:
+                    break;
+
+                    case WHITE_PIECE: 
+                    labelArray[i][j].setText("1");
+                    labelArray[i][j].setForeground(Color.RED);
+                    break;
+
+                    case BLACK_PIECE: 
+                    labelArray[i][j].setText("1");
+                    labelArray[i][j].setForeground(Color.BLACK);
+                    break;
+
+                    default:
+                    System.out.println("uhoh, something wrong with the setState switch");
+
+                }                  
+
+            }
+        }
+            
     }
 }
