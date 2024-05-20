@@ -1,46 +1,26 @@
 package GameOfUr;
 
 import java.lang.reflect.Array;
+import org.apache.commons.lang3.ArrayUtils;
 import GameOfUr.BoardStatus;
 import GameOfUr.BoardStatus.TileState;
+import GameOfUr.Player;
 
 class Board{
 
-	private Tile[] whiteTiles;
-	private Tile[] blackTiles;
+	//private Tile[] whiteTiles;
+	//private Tile[] blackTiles;
 	private int[] whiteGPs;
 	private int[] blackGPs;
 	public GUI _gui;
-	
+	private Player _player1;
+	private Player _player2;
+
 	public void setGUI(GUI gui){
 		_gui = gui;
 	}
 
-	public void getWhiteTiles(){
-		for (Tile i : whiteTiles) {
-            System.out.println(i.isEmpty);
-        }
-	}
-
-	public void getBlackTiles(){
-			for (Tile i : blackTiles) {
-            	System.out.println(i.isEmpty);
-            }
-	}
-
-	public void getWhiteGPs(){
-		for (int i: whiteGPs){
-			System.out.println(i);
-		}
-	}
-
-	public void getBlackGPs(){
-		for (int i:blackGPs){
-			System.out.println(i);
-		}
-	}
-
-	private void setTiles(){
+	/*private void setTiles(){
 
 		Tile startTile_white = new Tile();
 		whiteTiles[0] = startTile_white;
@@ -102,29 +82,7 @@ class Board{
 		blackTiles[14] = tile14_black;
 		Tile endTile_black = new Tile();
 		blackTiles[15] = endTile_black;
-	}
-
-	public void moveGP(String player, int gamePieceIndex, int diceRoll){
-		int newGPposition = gamePieceIndex + diceRoll;
-		Tile newTile = null;
-
-		switch(player){
-			case "whitePlayer":
-				whiteGPs[gamePieceIndex] = newGPposition;
-				newTile = (Tile)Array.get(whiteTiles, newGPposition);
-				break;
-
-			case "blackPlayer": 
-				blackGPs[gamePieceIndex] = newGPposition;
-				newTile = (Tile)Array.get(blackTiles, newGPposition);
-				break;
-		}
-
-		newTile.setOccupied();
-
-		_gui.updateView();
-
-	}
+	}*/
 
 	public void initGPs(){
 
@@ -153,10 +111,86 @@ class Board{
 		this.whiteGPs = new int[7];
 		this.blackGPs = new int[7];
 		
-		this.setTiles();
+		//this.setTiles();
 		this.initGPs();
+		}
+
+	public void setPlayers(Player player1, Player player2){
+		_player1 = player1;
+		_player2 = player2;
+	}
+
+	private int[] getPlayerGPs(Player player){
+		if(player.equals(_player1)){
+			return whiteGPs;
+		}else{
+			return blackGPs;
+		}
+	}
+
+	private int[] getOpponentGPs(Player player){
+		if(player.equals(_player1)){
+			return blackGPs;
+		}else{
+			return whiteGPs;
+		}
+	}
+	
+	private Tile[] getPlayerTiles(Player player){
+		if(player.equals(_player1)){
+			return whiteTiles;
+		}else{
+			return blackTiles;
+		}
+	}
+
+	private Boolean canMoveTo(Player player, int newGPposition){
+
+		int[] playerGPs = this.getPlayerGPs(player);
+		int[] opponentGPs = this.getOpponentGPs(player);
+
+		// MOVE IS OUT OF BOARD BOUNDS
+		if(newGPposition > 15){
+			return false;
+		}
+		// NEW TILE ALREADY HAS A PLAYER TILE
+		if(newGPposition < 15 && ArrayUtils.contains(playerGPs, newGPposition)){
+			return false;
+		}
+		// TILE IS A FLOWER TILE ALREADY OCCUPIED BY OPPONENT
+		if(newGPposition == 8 && ArrayUtils.contains(opponentGPs, 8)){
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public void moveGP(Player player, int gamePieceIndex, int diceRoll){
+		int newGPposition = gamePieceIndex + diceRoll;
+
+		if(! canMoveTo(player, newGPposition)){
+			System.out.println("move is not allowed");
+			return;
+		}
+
+		int[] playerGPs = this.getPlayerGPs(player); // NOT a copy, but a reference
+		int[] opponentGPs = this.getOpponentGPs(player); // NOT a copy, but a reference
+
+
+		if(ArrayUtils.contains(opponentGPs, newGPposition)){
+
+			int index = ArrayUtils.indexOf(opponentGPs, newGPposition);
+			opponentGPs[index] = 0;
 
 		}
+
+		playerGPs[gamePieceIndex] = newGPposition;
+
+		_gui.updateView();
+
+	}
+
 
 	////////// METHODS NEEDED TO CREATE THE STATUS /////////
 
@@ -310,9 +344,9 @@ class Board{
             }
 
         for (int i = 0; i < blackGPs.length; i++) {
-        		if(whiteGPs[i] == 0){
+        		if(blackGPs[i] == 0){
 					status.blackStartGPsCount ++;
-				}else if(whiteGPs[i] == 15){
+				}else if(blackGPs[i] == 15){
 					status.blackEndGPsCount ++;
 				}else{
 				int z = blackGPs[i];

@@ -25,6 +25,11 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.14.0</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -51,12 +56,18 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+        </plugin>
+         <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
           <configuration>
-            <archive>
-              <manifest>
-                <mainClass>GameOfUr.GameOfUr</mainClass>
-              </manifest>
-            </archive>
+              <archive>
+                  <manifest>
+                      <mainClass>GameOfUr.GameOfUr</mainClass>
+                  </manifest>
+              </archive>
+              <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
           </configuration>
         </plugin>
         <plugin>

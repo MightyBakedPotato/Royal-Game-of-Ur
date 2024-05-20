@@ -4,7 +4,7 @@
     <property name="java.specification.version" value="18"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.class.path" value="C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\test-classes;C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\classes;C:\Users\emwin\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\emwin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="java.class.path" value="C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\test-classes;C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\classes;C:\Users\emwin\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\emwin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\emwin\.m2\repository\org\apache\commons\commons-lang3\3.14.0\commons-lang3-3.14.0.jar;"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
@@ -15,9 +15,9 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="IT"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-18.0.1.1\bin"/>
-    <property name="sun.java.command" value="C:\Users\emwin\AppData\Local\Temp\surefire13662369664223210433\surefirebooter8240401850835530925.jar C:\Users\emwin\AppData\Local\Temp\surefire13662369664223210433 2024-05-13T19-54-18_777-jvmRun1 surefire7704970298535593124tmp surefire_04555069246045514413tmp"/>
+    <property name="sun.java.command" value="C:\Users\emwin\AppData\Local\Temp\surefire5053942637175637727\surefirebooter10792970444955950001.jar C:\Users\emwin\AppData\Local\Temp\surefire5053942637175637727 2024-05-20T20-03-25_675-jvmRun1 surefire14157476810062380524tmp surefire_010534403340666523218tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\test-classes;C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\classes;C:\Users\emwin\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\emwin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="surefire.test.class.path" value="C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\test-classes;C:\Users\emwin\Desktop\Royal-Game-of-Ur\target\classes;C:\Users\emwin\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\emwin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\emwin\.m2\repository\org\apache\commons\commons-lang3\3.14.0\commons-lang3-3.14.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\emwin"/>
     <property name="user.language" value="it"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\emwin\AppData\Local\Temp\surefire13662369664223210433\surefirebooter8240401850835530925.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\emwin\AppData\Local\Temp\surefire5053942637175637727\surefirebooter10792970444955950001.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="18.0.1.1+2-6"/>
@@ -56,5 +56,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="62.0"/>
   </properties>
-  <testcase name="shouldAnswerWithTrue" classname="GameOfUr.AppTest" time="0"/>
+  <testcase name="shouldAnswerWithTrue" classname="GameOfUr.AppTest" time="0.016"/>
 </testsuite>
