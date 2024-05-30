@@ -105,8 +105,8 @@ class Board{
 	}
 
 	Board(){
-		this.whiteTiles = new Tile[16];
-		this.blackTiles = new Tile[16];
+		//this.whiteTiles = new Tile[16];
+		//this.blackTiles = new Tile[16];
 
 		this.whiteGPs = new int[7];
 		this.blackGPs = new int[7];
@@ -136,13 +136,12 @@ class Board{
 		}
 	}
 	
-	private Tile[] getPlayerTiles(Player player){
+	/*	private Tile[] getPlayerTiles(Player player){
 		if(player.equals(_player1)){
 			return whiteTiles;
 		}else{
 			return blackTiles;
-		}
-	}
+		}}*/
 
 	private Boolean canMoveTo(Player player, int newGPposition){
 
@@ -196,7 +195,7 @@ class Board{
 
 	private final int colSwitchFirstTiles(int index){
 
-		int j = 999;
+		int j = -1;
 
 		switch(index){
 			case 0 :

@@ -3,15 +3,19 @@ package GameOfUr;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.LineBorder;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import org.apache.commons.lang3.ArrayUtils;
 import GameOfUr.BoardStatus;
 import GameOfUr.BoardStatus.TileState;
 
-class GUI{
+class GUI implements MouseListener{
 
     private JFrame frame;
     //private Container content;
     private TileLabel[][] labelArray;
     private Board _model;
+    private int selectedTile;
 
     public void setModel(Board model){
         _model = model;
@@ -55,6 +59,7 @@ class GUI{
                 labelArray[i][j] = new TileLabel();
                 c.gridx = j;
                 c.gridy = i;
+                labelArray[i][j].addMouseListener(this);
                 frame.getContentPane().add(labelArray[i][j], c);
                 }
             }
@@ -71,115 +76,10 @@ class GUI{
         content.setLayout( new GridBagLayout());
 
         labelArray();
-
-        /*
-        {
-            TileLabel startLabel_white = new TileLabel();
-            c.gridx = 4;
-            c.gridy = 0;
-            content.add(startLabel_white, c);
-
-            TileLabel label1_white = new TileLabel();        
-            c.gridx = 3;
-            content.add(label1_white, c);
-
-            TileLabel label2_white = new TileLabel();        
-            c.gridx = 2;
-            content.add(label2_white, c);
-
-            TileLabel label3_white = new TileLabel();
-            c.gridx = 1;
-            content.add(label3_white, c);
-            
-            TileLabel label4_white = new TileLabel();
-            c.gridx = 0;
-            content.add(label4_white, c);
-                ///
-            TileLabel startLabel_black = new TileLabel();
-            c.gridy = 2;
-            c.gridx = 4;
-            content.add(startLabel_black, c);
-            
-            TileLabel label1_black = new TileLabel();
-            c.gridx = 3;
-            content.add(label1_black, c);
-            
-            TileLabel label2_black = new TileLabel();
-            c.gridx = 2;
-            content.add(label2_black, c);
-            
-            TileLabel label3_black = new TileLabel();
-            c.gridx = 1;
-            content.add(label3_black, c);
-            
-            TileLabel label4_black = new TileLabel();
-            c.gridx = 0;
-            content.add(label4_black, c);
-                ///
-            TileLabel midLabel5 = new TileLabel(); 
-            c.gridy = 1;
-            c.gridx = 0;
-            content.add(midLabel5, c);       
-            
-            TileLabel midLabel6 = new TileLabel();
-            c.gridx = 1;
-            content.add(midLabel6, c);
-            
-            TileLabel midLabel7 = new TileLabel();
-            c.gridx = 2;
-            content.add(midLabel7, c);
-     
-            TileLabel midLabel8 = new TileLabel();
-            c.gridx = 3;
-            content.add(midLabel8, c);
-           
-            TileLabel midLabel9 = new TileLabel();
-            c.gridx = 4;
-            content.add(midLabel9, c);
-        
-            TileLabel midLabel10 = new TileLabel();
-            c.gridx = 5;
-            content.add(midLabel10, c);
-
-            TileLabel midLabel11 = new TileLabel();
-            c.gridx = 6;
-            content.add(midLabel11, c);
-
-            TileLabel midLabel12 = new TileLabel();
-            c.gridx = 7;
-            content.add(midLabel12, c);
-                ///    
-            TileLabel label13_white = new TileLabel();
-            c.gridy = 0;
-            c.gridx = 7;
-            content.add(label13_white, c);
-           
-            TileLabel label14_white = new TileLabel();
-            c.gridx = 6;
-            content.add(label14_white, c);
-           
-            TileLabel endLabel_white = new TileLabel();
-            c.gridx = 5;
-            content.add(endLabel_white, c);
-                ///    
-            TileLabel label13_black = new TileLabel();
-            c.gridy = 2;
-            c.gridx = 7;
-            content.add(label13_black, c);
-            
-            TileLabel label14_black = new TileLabel();
-            c.gridx = 6;
-            content.add(label14_black, c);
-            
-            TileLabel endLabel_black = new TileLabel();
-            c.gridx = 5;
-            content.add(endLabel_black, c);}
-        */
                 
     }
 
-    public void updateView ()
-    {
+    public void updateView (){
         BoardStatus status = _model.getStatus();
 
         for (int i = 0; i < labelArray.length; i++) {
@@ -230,4 +130,98 @@ class GUI{
         }
             
     }
+
+    public void mouseClicked(MouseEvent e) {
+        Object src = e.getSource();
+        int x = -1;
+        int y = -1;
+
+        for (int i = 0 ; i < labelArray.length; i++){
+            for(int j = 0 ; j < labelArray[i].length; j++){
+                if (labelArray[i][j].equals(src)){
+                    x = i;
+                    y = j;                        
+                }else{
+                System.out.println("couldn't find the TileLabel you clicked");
+                return;
+                }
+            }
+        }
+
+        this.selectedTile = getGPsIndexfromTileCoords(x, y);
+
+    }
+
+    public void mousePressed(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}
+
+    private int getGPsIndexfromTileCoords(int coordsX, int coordsY){
+        int index = -1;
+
+        if(coordsX == 0 || coordsX == 2){
+                switch(coordsY){
+                case 0 :
+                    index = 4;
+                    break;
+                case 1 :
+                    index = 3;
+                    break;
+                case 2 :
+                    index = 2;
+                    break;
+                case 3 :
+                    index = 1;
+                    break;
+                case 4 :
+                    index = 0;
+                    break;
+                case 5 :
+                    index = 15;
+                    break;
+                case 6 :
+                    index = 14;
+                    break;
+                case 7 :
+                    index = 13;
+                    break;
+                }
+            }else if(coordsX == 1){
+                switch(coordsY){
+                case 0 :
+                    index = 5;
+                    break;
+                case 1 :
+                    index = 6;
+                    break;
+                case 2 :
+                    index = 7;
+                    break;
+                case 3 :
+                    index = 8;
+                    break;
+                case 4 :
+                    index = 9;
+                    break;
+                case 5 :
+                    index = 10;
+                    break;
+                case 6 :
+                    index = 11;
+                    break;
+                case 7 :
+                    index = 12;
+                    break;
+                }
+            }
+
+        return index;
+                
+        }
+
+    public int getSelectedTile(){
+        return selectedTile;
+    }
+
 }

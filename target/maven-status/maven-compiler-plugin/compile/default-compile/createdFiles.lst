@@ -1,9 +1,2 @@
-GameOfUr\GameOfUr.class
-GameOfUr\Player.class
-GameOfUr\Tile.class
-GameOfUr\BoardStatus$TileState.class
-GameOfUr\GUI$TileLabel.class
 GameOfUr\BoardStatus.class
-GameOfUr\Board.class
-GameOfUr\GUI$1.class
-GameOfUr\GUI.class
+GameOfUr\BoardStatus$TileState.class
