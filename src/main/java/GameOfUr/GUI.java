@@ -15,7 +15,6 @@ class GUI implements MouseListener{
     //private Container content;
     private TileLabel[][] labelArray;
     private Board _model;
-    private int selectedTile;
 
     public void setModel(Board model){
         _model = model;
@@ -80,7 +79,9 @@ class GUI implements MouseListener{
     }
 
     public void updateView (){
-        BoardStatus status = _model.getStatus();
+        BoardStatus status = new BoardStatus();
+
+        status = _model.getStatus();
 
         for (int i = 0; i < labelArray.length; i++) {
             for (int j = 0; j < labelArray[i].length; j++) {
@@ -109,6 +110,7 @@ class GUI implements MouseListener{
                     break;
 
                     case EMPTY:
+                        labelArray[i][j].setText("");
                     break;
 
                     case WHITE_PIECE: 
@@ -138,17 +140,19 @@ class GUI implements MouseListener{
 
         for (int i = 0 ; i < labelArray.length; i++){
             for(int j = 0 ; j < labelArray[i].length; j++){
-                if (labelArray[i][j].equals(src)){
-                    x = i;
-                    y = j;                        
-                }else{
-                System.out.println("couldn't find the TileLabel you clicked");
-                return;
+                if (labelArray[i][j] == src){
+                    y = i;
+                    x = j;                        
                 }
             }
         }
 
-        this.selectedTile = getGPsIndexfromTileCoords(x, y);
+        if( x == -1 || y == -1){
+            System.out.println("couldn't find the TileLabel you clicked");
+            return;
+        }
+
+        _model.moveGP(y, x);
 
     }
 
@@ -219,9 +223,5 @@ class GUI implements MouseListener{
         return index;
                 
         }
-
-    public int getSelectedTile(){
-        return selectedTile;
-    }
 
 }

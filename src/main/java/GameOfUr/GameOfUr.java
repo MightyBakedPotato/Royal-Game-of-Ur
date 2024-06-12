@@ -4,12 +4,6 @@ import javax.swing.*;
 
 public class GameOfUr {
 
-int selectedTile;
-
-private void setSelectedTile(GUI gui){
-    this.selectedTile = gui.getSelectedTile();
-}
-
     public static void main(String args[]){
 
         Player whitePlayer = new Player("whitePlayer");
@@ -25,7 +19,9 @@ private void setSelectedTile(GUI gui){
         board.setGUI(gui);
         gui.setModel(board);
 
-        board.moveGP(whitePlayer,0, 6);
+        board.currentPlayer = whitePlayer;
+
+        board.diceRoll = 3;
 
     }
 }

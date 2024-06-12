@@ -15,6 +15,8 @@ class Board{
 	public GUI _gui;
 	private Player _player1;
 	private Player _player2;
+	public Player currentPlayer;
+	public int diceRoll;
 
 	public void setGUI(GUI gui){
 		_gui = gui;
@@ -135,13 +137,6 @@ class Board{
 			return whiteGPs;
 		}
 	}
-	
-	/*	private Tile[] getPlayerTiles(Player player){
-		if(player.equals(_player1)){
-			return whiteTiles;
-		}else{
-			return blackTiles;
-		}}*/
 
 	private Boolean canMoveTo(Player player, int newGPposition){
 
@@ -165,17 +160,123 @@ class Board{
 
 	}
 
-	public void moveGP(Player player, int gamePieceIndex, int diceRoll){
-		int newGPposition = gamePieceIndex + diceRoll;
+	private Boolean canCurrentPlayerBeOnRow(int y){
 
-		if(! canMoveTo(player, newGPposition)){
+		Boolean isWhitePlayerCurrentPlayer;
+
+		if(currentPlayer == _player1){
+			isWhitePlayerCurrentPlayer = true;
+		}else{
+			isWhitePlayerCurrentPlayer = false;
+		}
+
+		if(isWhitePlayerCurrentPlayer && y == 0){
+			return true;
+		}else if(! isWhitePlayerCurrentPlayer && y == 2){
+			return true;
+		}
+
+		if(isWhitePlayerCurrentPlayer && y == 2){
+			return false;
+		}else if(! isWhitePlayerCurrentPlayer && y == 0){
+			return false;
+		}else{
+			return true;
+		}
+
+	}
+
+	private int getGPsIndexValuefromTileCoords(int coordsY, int coordsX){
+        int indexValue = -1;
+
+        if(coordsY == 0 || coordsY == 2){
+                switch(coordsX){
+                case 0 :
+                    indexValue = 4;
+                    break;
+                case 1 :
+                    indexValue = 3;
+                    break;
+                case 2 :
+                    indexValue = 2;
+                    break;
+                case 3 :
+                    indexValue = 1;
+                    break;
+                case 4 :
+                    indexValue = 0;
+                    break;
+                case 5 :
+                    indexValue = 15;
+                    break;
+                case 6 :
+                    indexValue = 14;
+                    break;
+                case 7 :
+                    indexValue = 13;
+                    break;
+                }
+            }else if(coordsY == 1){
+                switch(coordsX){
+                case 0 :
+                    indexValue = 5;
+                    break;
+                case 1 :
+                    indexValue = 6;
+                    break;
+                case 2 :
+                    indexValue = 7;
+                    break;
+                case 3 :
+                    indexValue = 8;
+                    break;
+                case 4 :
+                    indexValue = 9;
+                    break;
+                case 5 :
+                    indexValue = 10;
+                    break;
+                case 6 :
+                    indexValue = 11;
+                    break;
+                case 7 :
+                    indexValue = 12;
+                    break;
+                }
+            }
+
+        return indexValue;
+                
+        }
+
+	public void moveGP(int y, int x){
+
+		if(! canCurrentPlayerBeOnRow(y)){
+			System.out.println("Clicked tile has no current player's gamepiece on it");
+			return;
+		}
+
+		int[] playerGPs = this.getPlayerGPs(currentPlayer); // NOT a copy, but a reference
+
+		int gamePieceValue = getGPsIndexValuefromTileCoords(y, x);
+
+		int gamePieceIndex = -1;
+
+		if(ArrayUtils.contains(playerGPs, gamePieceValue)){
+			gamePieceIndex = ArrayUtils.indexOf(playerGPs, gamePieceValue);
+		}else{
+			System.out.println("Clicked tile has no current player's gamepiece on it");
+			return;
+		}
+
+		int newGPposition = gamePieceValue + diceRoll;
+
+		if(! canMoveTo(currentPlayer, newGPposition)){
 			System.out.println("move is not allowed");
 			return;
 		}
 
-		int[] playerGPs = this.getPlayerGPs(player); // NOT a copy, but a reference
-		int[] opponentGPs = this.getOpponentGPs(player); // NOT a copy, but a reference
-
+		int[] opponentGPs = this.getOpponentGPs(currentPlayer); // NOT a copy, but a reference
 
 		if(ArrayUtils.contains(opponentGPs, newGPposition)){
 
@@ -190,14 +291,42 @@ class Board{
 
 	}
 
+	/*
+	public void moveGP(int gamePieceIndex){
+		int newGPposition = gamePieceIndex + diceRoll;
+
+		if(! canMoveTo(currentPlayer, newGPposition)){
+			System.out.println("move is not allowed");
+			return;
+		}
+
+		//add if "player has no gamepiece in the selected tile"
+
+		int[] playerGPs = this.getPlayerGPs(currentPlayer); // NOT a copy, but a reference
+		int[] opponentGPs = this.getOpponentGPs(currentPlayer); // NOT a copy, but a reference
+
+
+		if(ArrayUtils.contains(opponentGPs, newGPposition)){
+
+			int index = ArrayUtils.indexOf(opponentGPs, newGPposition);
+			opponentGPs[index] = 0;
+
+		}
+
+		playerGPs[gamePieceIndex] = newGPposition;
+
+		_gui.updateView();
+
+	}*/
+
 
 	////////// METHODS NEEDED TO CREATE THE STATUS /////////
 
-	private final int colSwitchFirstTiles(int index){
+	private final int colSwitchFirstTiles(int indexValue){
 
 		int j = -1;
 
-		switch(index){
+		switch(indexValue){
 			case 0 :
 				j = 4;
 				break;
@@ -218,11 +347,11 @@ class Board{
 		return j;
 	}
 
-	private final int colSwitchMiddleTiles(int index){
+	private final int colSwitchMiddleTiles(int indexValue){
 
 		int j = -1;
 
-		switch(index){
+		switch(indexValue){
 			case 5 :
 				j = 0;
 				break;
@@ -253,11 +382,11 @@ class Board{
 		
 		}
 
-	private final int colSwitchLastTiles(int index){
+	private final int colSwitchLastTiles(int indexValue){
 
 		int j = -1;
 
-		switch(index){
+		switch(indexValue){
 			case 13 :
 				j = 7;
 				break;
@@ -272,20 +401,20 @@ class Board{
 		return j;
 	}
 
-	private int[] getWhiteGPCoords(int index){
+	private int[] getWhiteGPCoords(int indexValue){
 
 		int i = -1;
 		int j = -1;
 
-		if(index <= 4){
+		if(indexValue <= 4){
 			i = 0;
-			j = colSwitchFirstTiles(index);
-		}else if(index >= 5 && index <= 12){
+			j = colSwitchFirstTiles(indexValue);
+		}else if(indexValue >= 5 && indexValue <= 12){
 			i = 1;
-			j = colSwitchMiddleTiles(index);
-		}else if(index >= 13 && index <= 16){
+			j = colSwitchMiddleTiles(indexValue);
+		}else if(indexValue >= 13 && indexValue <= 16){
 			i = 0;
-			j = colSwitchLastTiles(index);
+			j = colSwitchLastTiles(indexValue);
 		}else{
 			//there's smthg wrong here, log error :(
 		}
@@ -297,20 +426,20 @@ class Board{
 		return coords;
 	}
 
-	private int[] getBlackGPCoords(int index){
+	private int[] getBlackGPCoords(int indexValue){
 
 		int i = -1;
 		int j = -1;
 
-		if(index <= 4){
+		if(indexValue <= 4){
 			i = 2;
-			j = colSwitchFirstTiles(index);
-		}else if(index >= 5 && index <= 12){
+			j = colSwitchFirstTiles(indexValue);
+		}else if(indexValue >= 5 && indexValue <= 12){
 			i = 1;
-			j = colSwitchMiddleTiles(index);
-		}else if(index >= 13 && index <= 16){
+			j = colSwitchMiddleTiles(indexValue);
+		}else if(indexValue >= 13 && indexValue <= 16){
 			i = 2;
-			j = colSwitchLastTiles(index);
+			j = colSwitchLastTiles(indexValue);
 		}else{
 			//there's smthg wrong here, log error :(
 		}
