@@ -6,15 +6,20 @@ import javax.swing.border.LineBorder;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import org.apache.commons.lang3.ArrayUtils;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import GameOfUr.BoardStatus;
 import GameOfUr.BoardStatus.TileState;
 
-class GUI implements MouseListener{
+class GUI implements MouseListener, ActionListener{
 
     private JFrame frame;
     //private Container content;
     private TileLabel[][] labelArray;
     private Board _model;
+    private JLabel playerLabel;
+    private JLabel diceLabel;
+    private JButton skipButton;
 
     public void setModel(Board model){
         _model = model;
@@ -45,7 +50,7 @@ class GUI implements MouseListener{
         public void setState ( TileState state ){      
             this.state = state;
             }
-        }
+    }
 
     private void labelArray(){
 
@@ -75,13 +80,42 @@ class GUI implements MouseListener{
         content.setLayout( new GridBagLayout());
 
         labelArray();
-                
+
+        playerLabel = new JLabel();
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridwidth = 4;
+        c.gridy = 3;
+
+        content.add(playerLabel,c);
+
+        diceLabel = new JLabel();
+
+        c.gridx = GridBagConstraints.RELATIVE;
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.gridy = 3;
+
+        content.add(diceLabel,c);
+
+        skipButton = new JButton("skip turn");
+        skipButton.addActionListener(this);// to do: turn it into a lambda expression
+
+        c.gridx = 0;
+        c.gridwidth = 8;
+        c.gridy = 4;
+
+        content.add(skipButton,c);
+        
     }
 
     public void updateView (){
         BoardStatus status = new BoardStatus();
 
         status = _model.getStatus();
+
+        playerLabel.setText("current player: " + status.playerString);
+        diceLabel.setText("dice roll: " + status.diceRoll);
 
         for (int i = 0; i < labelArray.length; i++) {
             for (int j = 0; j < labelArray[i].length; j++) {
@@ -130,7 +164,14 @@ class GUI implements MouseListener{
 
             }
         }
-            
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource() == skipButton){
+            _model.endTurn();
+            updateView();
+        }
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -153,75 +194,11 @@ class GUI implements MouseListener{
         }
 
         _model.moveGP(y, x);
-
     }
 
     public void mousePressed(MouseEvent e){}
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}
     public void mouseReleased(MouseEvent e){}
-
-    private int getGPsIndexfromTileCoords(int coordsX, int coordsY){
-        int index = -1;
-
-        if(coordsX == 0 || coordsX == 2){
-                switch(coordsY){
-                case 0 :
-                    index = 4;
-                    break;
-                case 1 :
-                    index = 3;
-                    break;
-                case 2 :
-                    index = 2;
-                    break;
-                case 3 :
-                    index = 1;
-                    break;
-                case 4 :
-                    index = 0;
-                    break;
-                case 5 :
-                    index = 15;
-                    break;
-                case 6 :
-                    index = 14;
-                    break;
-                case 7 :
-                    index = 13;
-                    break;
-                }
-            }else if(coordsX == 1){
-                switch(coordsY){
-                case 0 :
-                    index = 5;
-                    break;
-                case 1 :
-                    index = 6;
-                    break;
-                case 2 :
-                    index = 7;
-                    break;
-                case 3 :
-                    index = 8;
-                    break;
-                case 4 :
-                    index = 9;
-                    break;
-                case 5 :
-                    index = 10;
-                    break;
-                case 6 :
-                    index = 11;
-                    break;
-                case 7 :
-                    index = 12;
-                    break;
-                }
-            }
-
-        return index;
-                
-        }
 
 }

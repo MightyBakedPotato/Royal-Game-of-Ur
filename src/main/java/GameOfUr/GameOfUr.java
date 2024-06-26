@@ -6,8 +6,8 @@ public class GameOfUr {
 
     public static void main(String args[]){
 
-        Player whitePlayer = new Player("whitePlayer");
-        Player blackPlayer = new Player("blackPlayer");
+        Player whitePlayer = new Player("white");
+        Player blackPlayer = new Player("black");
 
         //FACTORY per GUI e Board
 
@@ -18,14 +18,6 @@ public class GameOfUr {
         board.setPlayers(whitePlayer, blackPlayer);
         board.setGUI(gui);
         gui.setModel(board);
-        
-        TurnManager turnManager = new TurnManager(whitePlayer, blackPlayer, board);
-
-        board.setTurnManager(turnManager);
-
-        //board.currentPlayer = whitePlayer;
-
-        board.diceRoll = 3;
 
     }
 }

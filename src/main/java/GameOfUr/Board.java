@@ -2,6 +2,7 @@ package GameOfUr;
 
 import java.lang.reflect.Array;
 import org.apache.commons.lang3.ArrayUtils;
+import java.util.Random;
 import GameOfUr.BoardStatus;
 import GameOfUr.BoardStatus.TileState;
 import GameOfUr.Player;
@@ -14,8 +15,9 @@ class Board{
 	private Player _whitePlayer;
 	private Player _blackPlayer;
 	public Player currentPlayer;
-	public TurnManager _turnManager;
+	public Player opponentPlayer;
 	public int diceRoll;
+	public Player[] players;
 
 	public void setGUI(GUI gui){
 		_gui = gui;
@@ -37,30 +39,57 @@ class Board{
 		blackGPs[3] = 0;
 		blackGPs[4] = 0;
 		blackGPs[5] = 0;
-		blackGPs[6] = 0;
-		
+		blackGPs[6] = 0;		
 	}
 
 	public void setPlayers(Player whitePlayer, Player blackPlayer){
 		_whitePlayer = whitePlayer;
 		_blackPlayer = blackPlayer;
+
+		this.players = new Player[2];
+
+		players[0] = _whitePlayer;
+		players[1] = _blackPlayer;
+
+		int random = new Random().nextInt(players.length);
+
+		currentPlayer = players[random];
+
+		if(random == 0){
+			opponentPlayer = players[1];
+		}else{
+			opponentPlayer = players[0];
+		}
+
+		System.out.println("current player: " + currentPlayer.playerID);
 	}
 
-	public void setTurnManager(TurnManager turnManager){
-		_turnManager = turnManager;
+	public void endTurn(){
+		Player player = currentPlayer;
+
+		currentPlayer = opponentPlayer;
+		opponentPlayer = player;
+
+		System.out.println("current player: " + currentPlayer.playerID);
+
+		diceRoll();
+	}
+
+	public void diceRoll(){
+		diceRoll = new Random().nextInt(5);	
 	}
 
 	Board(){
-		//this.whiteTiles = new Tile[16];
-		//this.blackTiles = new Tile[16];
 
-		this.whiteGPs = new int[7];
-		this.blackGPs = new int[7];
+		whiteGPs = new int[7];
+		blackGPs = new int[7];
 		
-		//this.setTiles();
-		this.initGPs();
+		initGPs();
 
-		this.currentPlayer = new Player("fakePlayer");
+		currentPlayer = new Player("placeHolderPlayer");
+		opponentPlayer = new Player("placeHolderPlayer");
+
+		diceRoll();
 		}
 
 	private int[] getPlayerGPs(Player player){
@@ -219,6 +248,8 @@ class Board{
 
 		int[] opponentGPs = this.getOpponentGPs(currentPlayer); // NOT a copy, but a reference
 
+		//// EATING AN OPPONENT GAMEPIECE ////
+
 		if(newGPposition > 4 && newGPposition < 13 && ArrayUtils.contains(opponentGPs, newGPposition)){
 			int index = ArrayUtils.indexOf(opponentGPs, newGPposition);
 			opponentGPs[index] = 0;
@@ -226,12 +257,17 @@ class Board{
 
 		playerGPs[gamePieceIndex] = newGPposition;
 
-		_gui.updateView();
+		switch(newGPposition) {
+    		case 4:
+    		case 8:
+    		case 13:
+    		diceRoll();
+        	break;
+    		default:
+    		endTurn();
+    	}
 
-		if(newGPposition != 4 || newGPposition != 8 || newGPposition != 14){
-			_turnManager.endTurn();
-		}
-
+    	_gui.updateView();
 	}
 
 
@@ -374,6 +410,9 @@ class Board{
 				status.tilesGrid [coords[0]] [coords[1]] = TileState.BLACK_PIECE;
 				}            
             }
+
+        status.playerString = currentPlayer.getPlayerID();
+        status.diceRoll = diceRoll;
 
         return status;
 

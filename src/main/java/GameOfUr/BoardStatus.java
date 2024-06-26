@@ -10,6 +10,8 @@ class BoardStatus{
 	public int blackStartGPsCount;
 	public int whiteEndGPsCount;
 	public int blackEndGPsCount;
+	public String playerString;
+	public int diceRoll;
 
 	public enum TileState
 	{	
@@ -44,6 +46,8 @@ class BoardStatus{
 			int iEndBlack = 2;
     		int jEndBlack = tilesGrid[0].length - 3; 
 			tilesGrid[iEndBlack][jEndBlack] = TileState.END;
+
+			this.playerString = new String();
     }
 
     public void printStatus(){
