@@ -8,83 +8,18 @@ import GameOfUr.Player;
 
 class Board{
 
-	//private Tile[] whiteTiles;
-	//private Tile[] blackTiles;
 	private int[] whiteGPs;
 	private int[] blackGPs;
 	public GUI _gui;
-	private Player _player1;
-	private Player _player2;
+	private Player _whitePlayer;
+	private Player _blackPlayer;
 	public Player currentPlayer;
+	public TurnManager _turnManager;
 	public int diceRoll;
 
 	public void setGUI(GUI gui){
 		_gui = gui;
 	}
-
-	/*private void setTiles(){
-
-		Tile startTile_white = new Tile();
-		whiteTiles[0] = startTile_white;
-		Tile tile1_white = new Tile();
-		whiteTiles[1] = tile1_white;
-		Tile tile2_white = new Tile();
-		whiteTiles[2] = tile2_white;
-		Tile tile3_white = new Tile();
-		whiteTiles[3] = tile3_white;
-		Tile tile4_white = new Tile();
-		whiteTiles[4] = tile4_white;
-
-		Tile startTile_black = new Tile();
-		blackTiles[0] = startTile_black;
-		Tile tile1_black = new Tile();
-		blackTiles[1] = tile1_black;
-		Tile tile2_black = new Tile();
-		blackTiles[2] = tile2_black;
-		Tile tile3_black = new Tile();
-		blackTiles[3] = tile3_black;
-		Tile tile4_black = new Tile();
-		blackTiles[4] = tile4_black;
-
-		Tile midTile5 = new Tile();
-		blackTiles[5] = midTile5;
-		whiteTiles[5] = midTile5;
-		Tile midTile6 = new Tile();
-		blackTiles[6] = midTile6;
-		whiteTiles[6] = midTile6;
-		Tile midTile7 = new Tile();
-		blackTiles[7] = midTile7;
-		whiteTiles[7] = midTile7;
-		Tile midTile8 = new Tile();
-		blackTiles[8] = midTile8;
-		whiteTiles[8] = midTile8;
-		Tile midTile9 = new Tile();
-		blackTiles[9] = midTile9;
-		whiteTiles[9] = midTile9;
-		Tile midTile10 = new Tile();
-		blackTiles[10] = midTile10;
-		whiteTiles[10] = midTile10;
-		Tile midTile11 = new Tile();
-		blackTiles[11] = midTile11;
-		whiteTiles[11] = midTile11;
-		Tile midTile12 = new Tile();
-		blackTiles[12] = midTile12;
-		whiteTiles[12] = midTile12;
-	
-		Tile tile13_white = new Tile();
-		whiteTiles[13] = tile13_white;
-		Tile tile14_white = new Tile();
-		whiteTiles[14] = tile14_white;
-		Tile endTile_white = new Tile();
-		whiteTiles[15] = endTile_white;
-	
-		Tile tile13_black = new Tile();
-		blackTiles[13] = tile13_black;
-		Tile tile14_black = new Tile();
-		blackTiles[14] = tile14_black;
-		Tile endTile_black = new Tile();
-		blackTiles[15] = endTile_black;
-	}*/
 
 	public void initGPs(){
 
@@ -106,6 +41,15 @@ class Board{
 		
 	}
 
+	public void setPlayers(Player whitePlayer, Player blackPlayer){
+		_whitePlayer = whitePlayer;
+		_blackPlayer = blackPlayer;
+	}
+
+	public void setTurnManager(TurnManager turnManager){
+		_turnManager = turnManager;
+	}
+
 	Board(){
 		//this.whiteTiles = new Tile[16];
 		//this.blackTiles = new Tile[16];
@@ -115,15 +59,12 @@ class Board{
 		
 		//this.setTiles();
 		this.initGPs();
+
+		this.currentPlayer = new Player("fakePlayer");
 		}
 
-	public void setPlayers(Player player1, Player player2){
-		_player1 = player1;
-		_player2 = player2;
-	}
-
 	private int[] getPlayerGPs(Player player){
-		if(player.equals(_player1)){
+		if(player.equals(_whitePlayer)){
 			return whiteGPs;
 		}else{
 			return blackGPs;
@@ -131,7 +72,7 @@ class Board{
 	}
 
 	private int[] getOpponentGPs(Player player){
-		if(player.equals(_player1)){
+		if(player.equals(_whitePlayer)){
 			return blackGPs;
 		}else{
 			return whiteGPs;
@@ -164,7 +105,7 @@ class Board{
 
 		Boolean isWhitePlayerCurrentPlayer;
 
-		if(currentPlayer == _player1){
+		if(currentPlayer == _whitePlayer){
 			isWhitePlayerCurrentPlayer = true;
 		}else{
 			isWhitePlayerCurrentPlayer = false;
@@ -247,14 +188,14 @@ class Board{
 
         return indexValue;
                 
-        }
+    }
 
 	public void moveGP(int y, int x){
 
 		if(! canCurrentPlayerBeOnRow(y)){
 			System.out.println("Clicked tile has no current player's gamepiece on it");
 			return;
-		}
+		} // because player gamepieces cannot ever be found on the clicked tile's row
 
 		int[] playerGPs = this.getPlayerGPs(currentPlayer); // NOT a copy, but a reference
 
@@ -278,51 +219,25 @@ class Board{
 
 		int[] opponentGPs = this.getOpponentGPs(currentPlayer); // NOT a copy, but a reference
 
-		if(ArrayUtils.contains(opponentGPs, newGPposition)){
-
+		if(newGPposition > 4 && newGPposition < 13 && ArrayUtils.contains(opponentGPs, newGPposition)){
 			int index = ArrayUtils.indexOf(opponentGPs, newGPposition);
 			opponentGPs[index] = 0;
-
 		}
 
 		playerGPs[gamePieceIndex] = newGPposition;
 
 		_gui.updateView();
+
+		if(newGPposition != 4 || newGPposition != 8 || newGPposition != 14){
+			_turnManager.endTurn();
+		}
 
 	}
-
-	/*
-	public void moveGP(int gamePieceIndex){
-		int newGPposition = gamePieceIndex + diceRoll;
-
-		if(! canMoveTo(currentPlayer, newGPposition)){
-			System.out.println("move is not allowed");
-			return;
-		}
-
-		//add if "player has no gamepiece in the selected tile"
-
-		int[] playerGPs = this.getPlayerGPs(currentPlayer); // NOT a copy, but a reference
-		int[] opponentGPs = this.getOpponentGPs(currentPlayer); // NOT a copy, but a reference
-
-
-		if(ArrayUtils.contains(opponentGPs, newGPposition)){
-
-			int index = ArrayUtils.indexOf(opponentGPs, newGPposition);
-			opponentGPs[index] = 0;
-
-		}
-
-		playerGPs[gamePieceIndex] = newGPposition;
-
-		_gui.updateView();
-
-	}*/
 
 
 	////////// METHODS NEEDED TO CREATE THE STATUS /////////
 
-	private final int colSwitchFirstTiles(int indexValue){
+	private final int colSwitchTiles(int indexValue){
 
 		int j = -1;
 
@@ -342,16 +257,6 @@ class Board{
 			case 4 :
 				j = 0;
 				break;
-		}
-
-		return j;
-	}
-
-	private final int colSwitchMiddleTiles(int indexValue){
-
-		int j = -1;
-
-		switch(indexValue){
 			case 5 :
 				j = 0;
 				break;
@@ -376,17 +281,6 @@ class Board{
 			case 12 :
 				j = 7;
 				break;
-			}
-
-		return j;
-		
-		}
-
-	private final int colSwitchLastTiles(int indexValue){
-
-		int j = -1;
-
-		switch(indexValue){
 			case 13 :
 				j = 7;
 				break;
@@ -406,15 +300,14 @@ class Board{
 		int i = -1;
 		int j = -1;
 
+		j = colSwitchTiles(indexValue);
+
 		if(indexValue <= 4){
 			i = 0;
-			j = colSwitchFirstTiles(indexValue);
 		}else if(indexValue >= 5 && indexValue <= 12){
 			i = 1;
-			j = colSwitchMiddleTiles(indexValue);
 		}else if(indexValue >= 13 && indexValue <= 16){
 			i = 0;
-			j = colSwitchLastTiles(indexValue);
 		}else{
 			//there's smthg wrong here, log error :(
 		}
@@ -431,15 +324,14 @@ class Board{
 		int i = -1;
 		int j = -1;
 
+		j = colSwitchTiles(indexValue);
+
 		if(indexValue <= 4){
 			i = 2;
-			j = colSwitchFirstTiles(indexValue);
 		}else if(indexValue >= 5 && indexValue <= 12){
 			i = 1;
-			j = colSwitchMiddleTiles(indexValue);
 		}else if(indexValue >= 13 && indexValue <= 16){
 			i = 2;
-			j = colSwitchLastTiles(indexValue);
 		}else{
 			//there's smthg wrong here, log error :(
 		}

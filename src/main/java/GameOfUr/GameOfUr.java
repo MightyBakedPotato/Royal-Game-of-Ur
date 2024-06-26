@@ -18,8 +18,12 @@ public class GameOfUr {
         board.setPlayers(whitePlayer, blackPlayer);
         board.setGUI(gui);
         gui.setModel(board);
+        
+        TurnManager turnManager = new TurnManager(whitePlayer, blackPlayer, board);
 
-        board.currentPlayer = whitePlayer;
+        board.setTurnManager(turnManager);
+
+        //board.currentPlayer = whitePlayer;
 
         board.diceRoll = 3;
 
