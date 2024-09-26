@@ -25,6 +25,8 @@ class Board{
 
 	public void initGPs(){
 
+		//for all?
+
 		whiteGPs[0] = 0;
 		whiteGPs[1] = 0;
 		whiteGPs[2] = 0;
@@ -53,11 +55,11 @@ class Board{
 
 		int random = new Random().nextInt(players.length);
 
-		currentPlayer = players[random];
-
 		if(random == 0){
+			currentPlayer = players[0];
 			opponentPlayer = players[1];
 		}else{
+			currentPlayer = players[1];
 			opponentPlayer = players[0];
 		}
 
@@ -72,7 +74,7 @@ class Board{
 
 		System.out.println("current player: " + currentPlayer.playerID);
 
-		diceRoll();
+		diceRoll();// for legibility purpose, wrap it up in a "startTurn" function
 	}
 
 	public void diceRoll(){
@@ -85,9 +87,6 @@ class Board{
 		blackGPs = new int[7];
 		
 		initGPs();
-
-		currentPlayer = new Player("placeHolderPlayer");
-		opponentPlayer = new Player("placeHolderPlayer");
 
 		diceRoll();
 		}
@@ -253,14 +252,14 @@ class Board{
 		if(newGPposition > 4 && newGPposition < 13 && ArrayUtils.contains(opponentGPs, newGPposition)){
 			int index = ArrayUtils.indexOf(opponentGPs, newGPposition);
 			opponentGPs[index] = 0;
-		}
+		}// separate the two conditions into two if, the midrow if make it into a costant
 
 		playerGPs[gamePieceIndex] = newGPposition;
 
 		switch(newGPposition) {
     		case 4:
     		case 8:
-    		case 13:
+    		case 14:
     		diceRoll();
         	break;
     		default:

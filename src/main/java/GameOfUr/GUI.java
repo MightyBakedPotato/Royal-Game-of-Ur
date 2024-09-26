@@ -2,6 +2,7 @@ package GameOfUr;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
@@ -15,36 +16,75 @@ class GUI implements MouseListener, ActionListener{
 
     private JFrame frame;
     //private Container content;
-    private TileLabel[][] labelArray;
+    private TilePane[][] tileArray;
     private Board _model;
     private JLabel playerLabel;
     private JLabel diceLabel;
     private JButton skipButton;
+
+    ImageIcon flowerTile = new ImageIcon(getClass().getResource("/flowerTile.png"));
+    ImageIcon eyeTile = new ImageIcon(getClass().getResource("/eyeTile.png"));
+    ImageIcon squareTile = new ImageIcon(getClass().getResource("/squaresTile.png"));
+    ImageIcon zebraTile = new ImageIcon(getClass().getResource("/zebraTile.png"));
+    ImageIcon dotsTile = new ImageIcon(getClass().getResource("/dotsTile.png"));
+
+    ImageIcon whiteGPIcon = new ImageIcon(getClass().getResource("/whiteGP.png"));
+    ImageIcon blackGPIcon = new ImageIcon(getClass().getResource("/blackGP.png"));
+
 
     public void setModel(Board model){
         _model = model;
         updateView();
     }
 
-    class TileLabel extends JLabel{
+    class TilePane extends JLayeredPane{
 
         private TileState state;
+        private Dimension tileDimension = new Dimension(80,80);
 
-        private void setStyle(){
-            setBorder(new LineBorder(Color.BLACK));
-            setPreferredSize(new Dimension(40, 40));
-            setHorizontalAlignment(SwingConstants.CENTER);
-            setVerticalAlignment(SwingConstants.CENTER);
+        TilePane(){
+            setPreferredSize(tileDimension);            
+            /*
+            this.gamePieceLabel = new JLabel();
+            gamePieceLabel.setBounds(0,0,80,80);
+            gamePieceLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            gamePieceLabel.setVerticalAlignment(SwingConstants.CENTER);
+            
+            this.add(gamePieceLabel,0);
+            */
         }
 
-        TileLabel(String text){
-            setText(text);
-            setStyle();
+        public void setBackgroundImg(ImageIcon tileIcon){
+            JLabel backgroundImgLabel = new JLabel(tileIcon);
+            backgroundImgLabel.setBounds(0,0,80,80);
+            this.add(backgroundImgLabel, JLayeredPane.DEFAULT_LAYER);
         }
 
-        TileLabel(){
-            setStyle();
-            //setText("a");
+        public void setGPIcon(ImageIcon gpIcon){
+            JLabel gamePieceLabel = new JLabel(gpIcon);
+            gamePieceLabel.setBounds(0,0,80,80);
+            this.add(gamePieceLabel, JLayeredPane.PALETTE_LAYER);
+        }
+
+        public void setGPIcon(){
+            Component[] compArray = this.getComponentsInLayer(JLayeredPane.PALETTE_LAYER);
+
+            if ( compArray.length != 0){
+                this.remove(compArray[0]);
+                this.repaint();
+            }
+        }
+
+        public void setStackedGPIcons(int numberofGPs, ImageIcon gpIcon){
+
+        int y = 5;
+
+            for(int i = 0; i <numberofGPs; i ++){
+                JLabel gamePieceLabel = new JLabel(gpIcon);
+                gamePieceLabel.setBounds(SwingConstants.CENTER, y, gpIcon.getIconWidth(), gpIcon.getIconHeight());
+                y = +10;
+                this.add(gamePieceLabel,0,i);
+            }
         }
 
         public void setState ( TileState state ){      
@@ -52,21 +92,43 @@ class GUI implements MouseListener, ActionListener{
             }
     }
 
-    private void labelArray(){
+    private void tileArray(){
 
-        this.labelArray = new TileLabel[3][8];
+        this.tileArray = new TilePane[3][8];
 
         GridBagConstraints c = new GridBagConstraints();
 
-        for (int i = 0; i < labelArray.length; i++) {
-            for (int j = 0; j < labelArray[i].length; j++) {
-                labelArray[i][j] = new TileLabel();
+        for (int i = 0; i < tileArray.length; i++) {
+            for (int j = 0; j < tileArray[i].length; j++) {
+                tileArray[i][j] = new TilePane();
                 c.gridx = j;
                 c.gridy = i;
-                labelArray[i][j].addMouseListener(this);
-                frame.getContentPane().add(labelArray[i][j], c);
+                c.insets = new Insets(2,2,2,2);
+                tileArray[i][j].addMouseListener(this);
+                frame.getContentPane().add(tileArray[i][j], c);
                 }
             }
+
+        tileArray[0][3].setBackgroundImg(eyeTile);
+        tileArray[0][2].setBackgroundImg(dotsTile);
+        tileArray[0][1].setBackgroundImg(eyeTile);
+        tileArray[0][0].setBackgroundImg(flowerTile);
+        tileArray[2][3].setBackgroundImg(eyeTile);
+        tileArray[2][2].setBackgroundImg(dotsTile);
+        tileArray[2][1].setBackgroundImg(eyeTile);
+        tileArray[2][0].setBackgroundImg(flowerTile);
+        tileArray[1][0].setBackgroundImg(squareTile);
+        tileArray[1][1].setBackgroundImg(dotsTile);
+        tileArray[1][2].setBackgroundImg(zebraTile);
+        tileArray[1][3].setBackgroundImg(flowerTile);
+        tileArray[1][4].setBackgroundImg(dotsTile);
+        tileArray[1][5].setBackgroundImg(zebraTile);
+        tileArray[1][6].setBackgroundImg(eyeTile);
+        tileArray[1][7].setBackgroundImg(dotsTile);
+        tileArray[0][6].setBackgroundImg(flowerTile);
+        tileArray[0][7].setBackgroundImg(zebraTile);
+        tileArray[2][6].setBackgroundImg(flowerTile);
+        tileArray[2][7].setBackgroundImg(zebraTile);
     }    
 
     GUI(){
@@ -79,7 +141,7 @@ class GUI implements MouseListener, ActionListener{
 
         content.setLayout( new GridBagLayout());
 
-        labelArray();
+        tileArray();
 
         playerLabel = new JLabel();
 
@@ -117,44 +179,38 @@ class GUI implements MouseListener, ActionListener{
         playerLabel.setText("current player: " + status.playerString);
         diceLabel.setText("dice roll: " + status.diceRoll);
 
-        for (int i = 0; i < labelArray.length; i++) {
-            for (int j = 0; j < labelArray[i].length; j++) {
-                labelArray[i][j].setState(status.tilesGrid[i][j]);
+        for (int i = 0; i < tileArray.length; i++) {
+            for (int j = 0; j < tileArray[i].length; j++) {
+                tileArray[i][j].setState(status.tilesGrid[i][j]);
 
-                switch(labelArray[i][j].state){
+                switch(tileArray[i][j].state){
 
                     case START:
-                    if(i == 0 && j == labelArray[0].length - 4){
-                        labelArray[i][j].setText(String.valueOf(status.whiteStartGPsCount));
-                        labelArray[i][j].setForeground(Color.RED);
-                    }else if(i == 2 && j == labelArray[0].length - 4){
-                        labelArray[i][j].setText(String.valueOf(status.blackStartGPsCount));
-                        labelArray[i][j].setForeground(Color.BLACK);
+                    if(i == 0 && j == tileArray[0].length - 4){
+                        tileArray[i][j].setStackedGPIcons(status.whiteStartGPsCount, whiteGPIcon);
+                    }else if(i == 2 && j == tileArray[0].length - 4){
+                        tileArray[i][j].setStackedGPIcons(status.blackStartGPsCount, blackGPIcon);
                     }
                     break;
 
                     case END:
-                    if(i == 0 && j == labelArray[0].length - 3){
-                        labelArray[i][j].setText(String.valueOf(status.whiteEndGPsCount));
-                        labelArray[i][j].setForeground(Color.RED);
-                    }else if(i == 2 && j == labelArray[0].length -3){
-                        labelArray[i][j].setText(String.valueOf(status.blackEndGPsCount));
-                        labelArray[i][j].setForeground(Color.BLACK);
+                    if(i == 0 && j == tileArray[0].length - 3){
+                        tileArray[i][j].setStackedGPIcons(status.whiteEndGPsCount, whiteGPIcon);
+                    }else if(i == 2 && j == tileArray[0].length -3){
+                        tileArray[i][j].setStackedGPIcons(status.blackEndGPsCount, blackGPIcon);
                     }
                     break;
 
                     case EMPTY:
-                        labelArray[i][j].setText("");
+                    tileArray[i][j].setGPIcon(null);
                     break;
 
                     case WHITE_PIECE: 
-                    labelArray[i][j].setText("1");
-                    labelArray[i][j].setForeground(Color.RED);
+                    tileArray[i][j].setGPIcon(whiteGPIcon);
                     break;
 
                     case BLACK_PIECE: 
-                    labelArray[i][j].setText("1");
-                    labelArray[i][j].setForeground(Color.BLACK);
+                    tileArray[i][j].setGPIcon(blackGPIcon);
                     break;
 
                     default:
@@ -179,9 +235,9 @@ class GUI implements MouseListener, ActionListener{
         int x = -1;
         int y = -1;
 
-        for (int i = 0 ; i < labelArray.length; i++){
-            for(int j = 0 ; j < labelArray[i].length; j++){
-                if (labelArray[i][j] == src){
+        for (int i = 0 ; i < tileArray.length; i++){
+            for(int j = 0 ; j < tileArray[i].length; j++){
+                if (tileArray[i][j] == src){
                     y = i;
                     x = j;                        
                 }
@@ -189,7 +245,7 @@ class GUI implements MouseListener, ActionListener{
         }
 
         if( x == -1 || y == -1){
-            System.out.println("couldn't find the TileLabel you clicked");
+            System.out.println("couldn't find the TilePanel you clicked");
             return;
         }
 
